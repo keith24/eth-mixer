@@ -1,4 +1,4 @@
-var mixer = artifacts.require("./mixer.sol");
+const mixer = artifacts.require("./Mixer");
 
 module.exports = function(deployer) {
   deployer.deploy(mixer);
