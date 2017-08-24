@@ -25,7 +25,7 @@ contract Mixer {
         balance_changed(balance);
     }
     
-		/// Withdraw ether from the pot
+    /// Withdraw ether from the pot
     function withdraw(address output, uint amount) {
         
         /// Ensure the user has deposited that much
