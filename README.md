@@ -11,6 +11,22 @@ If you don't already have [truffle](https://github.com/trufflesuite/truffle) ins
 sudo npm i -g truffle
 ```
 
+Clone the repo
+```sh
+git clone https://github.com/keith24/eth-mixer.git
+cd eth-mixer.git
+```
+
+## Running Tests
+
+You need to have `testrpc` running (see below).  
+
+```sh
+truffle test
+```
+
+## Usage
+
 You may want to experiment with [testrpc](https://github.com/ethereumjs/testrpc) since this is alpha software.  
 
 ```sh
@@ -21,8 +37,6 @@ testrpc
 Once you're ready to deploy: 
 
 ```sh
-git clone https://github.com/keith24/eth-mixer.git &&\
-cd mixer &&\
-truffle compile &&\
+truffle compile
 truffle migration
 ```
