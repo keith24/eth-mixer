@@ -30,7 +30,7 @@ truffle test
 You may want to experiment with [testrpc](https://github.com/ethereumjs/testrpc) since this is alpha software.  
 
 ```sh
-sudo npm i -g testrpc &&\
+sudo npm i -g ethereumjs-testrpc &&\
 testrpc
 ```
 
