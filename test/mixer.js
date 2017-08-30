@@ -7,16 +7,19 @@ contract('Mixer', (accounts)=>{
 		return Mixer.deployed().then( (instance)=>{
 			meta = instance;
 			// Check inital balance
-			return meta.balance.call();
-		}).then( (balance)=>{
-			assert.equal(balance, 0, "Balance didn't initiate at 0");
+			return meta.total.call();
+		})
+		.then( (balance)=>{
+			assert.equal(balance, 0, "Total balance didn't initiate at 0");
 			// Perform deposit
 			return meta.deposit({from:accounts[0], value:10});
-		}).then( ()=>{
+		})
+		.then( ()=>{
 			// Check final balance
-			return meta.balance.call();
-		}).then( (balance)=>{
-			assert.equal(balance.toNumber(), 10, "Balance didn't increase to 10");
+			return meta.total.call();
+		})
+		.then( (balance)=>{
+			assert.equal(balance.toNumber(), 10, "Total balance didn't increase to 10");
 		});
 	});
 	
@@ -26,26 +29,34 @@ contract('Mixer', (accounts)=>{
 			meta = instance;
 			// Attempt withdraw
 			return meta.withdraw.call(accounts[2], 5, {from:accounts[1]});
-		}).then( ()=>{
-			// Check balance again
-			return meta.balance.call();
-		}).then( (balance)=>{
-			assert.equal(balance.toNumber(), 10, "Unauthorized account withdrew some funds");
+		})
+		.then(assert.fail)
+		.catch( (err)=>{
+			assert(err.message.indexOf("invalid opcode")>=0,"Didn't ensure the user has deposited that much funds")
+		})
+		.then( ()=>{
+			// Check total again
+			return meta.total.call();
+		})
+		.then( (total)=>{
+			assert.equal(total.toNumber(), 10, "Unauthorized account withdrew some funds");
 		});
 	});
 	
-	it("should let the first account withdraw eth to the third", ()=>{
+	it("should let the first account withdraw to the third", ()=>{
 		var meta;
 		return Mixer.deployed().then( (instance)=>{
 			meta = instance;
 			// Attempt withdraw
-			return meta.withdraw.call(accounts[2], 5, {from:accounts[0]});
-		}).then( ()=>{
+			return meta.withdraw(accounts[2], 5, {from:accounts[0]});
+		})
+		.then( ()=>{
 			// Check balance again
-			return meta.balance.call();
-		}).then( (balance)=>{
-			assert.equal(balance.toNumber(), 5, "Unable to withdraw funds");
+			return meta.total.call();			
+		})
+		.then( (total)=>{
+			assert.equal(total.toNumber(), 5, "Unable to withdraw funds");
 		});
 	});
 
-});	
+});
