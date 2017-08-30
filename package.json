@@ -1,0 +1,36 @@
+{
+  "name": "eth-mixer",
+  "version": "0.0.0",
+  "description": "A mixer for your ether",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "web3": "^1.0.0-beta.18"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keith24/eth-mixer.git"
+  },
+  "keywords": [
+    "ether",
+    "ethereum",
+    "mixer",
+    "tumbler"
+  ],
+  "author": {
+    "name" : "Keith Irwin"
+  , "email" : "npm@keithirwin.us"
+  , "url" : "https://keithirwin.us/"
+},
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/keith24/eth-mixer/issues"
+  },
+  "homepage": "https://github.com/keith24/eth-mixer#readme"
+}
