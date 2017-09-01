@@ -1,7 +1,9 @@
 # eth-mixer
 ###### [Keith Irwin](https://keithirwin.us/)
 
-Just a simple mixer for ether to learn about smart contracting
+Just a simple [mixer](https://en.wikipedia.org/wiki/Cryptocurrency_tumbler) for ether to learn about smart contracting.  Users can deposit ether into the contract using `deposit()`, and withdraw the funds to a different address using `withdraw()`.  
+
+As of right now, this contract is mostly pointless because all these transactions are recorded on the blockchain.  Thus, this mixer doesn't actually anonymize its users.  
 
 ## Installation
 
