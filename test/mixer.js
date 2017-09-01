@@ -1,6 +1,6 @@
 const Mixer = artifacts.require('Mixer');
 
-// Aliases for web3 functions
+// Aliases
 function getBalance(address) {
 	return web3.eth.getBalance(address);
 }
@@ -10,7 +10,6 @@ function toEth(wei) {
 function toWei(eth) {
 	return web3.toWei(eth,'ether');
 }
-
 const gasPrice = Mixer.class_defaults.gasPrice/10000;
 
 contract('Mixer', (accounts)=>{
@@ -55,10 +54,50 @@ contract('Mixer', (accounts)=>{
 				`User balance didn't increase by ${depositAmount}, but went from ${userBalanceInitial} to ${userBalanceFinal}`);
 			assert.equal(contractFinal-contractInitial, depositAmount, 
 				`Contract balance didn't increase by ${depositAmount} eth, but went from ${contractInitial} to ${contractFinal}`);
-			assert.equal(+((accountInitial-accountFinal).toFixed(7)), depositAmount+gasPaid, 
+			assert.equal(+(accountInitial-accountFinal).toFixed(7), depositAmount+gasPaid, 
 				`Account one balance didn't decrease by ${depositAmount+gasPaid} eth, but went from ${accountInitial} to ${accountFinal}`);
 		});
 		
+	});
+	
+	it(`should let the first account check its balance`, ()=>{
+		var perceivedBalance, actualBalance;
+		
+		return Mixer.deployed().then( (instance)=>{
+			meta = instance;
+			
+			// Check balances
+			return meta.showUserBalance.call(accounts[1]);
+		}).then( (balance)=>{
+			actualBalance = balance;
+			return meta.showUserBalance.call(accounts[1],{from:accounts[1]});
+		}).then( (balance)=>{
+			perceivedBalance = balance;
+			
+			// Check assertions
+			assert.equal( actualBalance-perceivedBalance, 0, `First account checked it's balance to be ${perceivedBalance}, but it's actually ${actualBalance}`);
+		});
+	});
+	
+	it(`should not let the second account check the balance of the first`, ()=>{
+		var perceivedBalance;
+		
+		return Mixer.deployed().then( (instance)=>{
+			meta = instance;
+			
+			// Attempt to check balance
+			return meta.showUserBalance.call(accounts[1],{from:accounts[2]});
+		}).then(assert.fail).catch( (err)=>{
+			assert(err.message.indexOf(
+				"invalid opcode")>=0,
+				"Second account was able to check the balance of the first"
+			)
+		}).then( (balance)=>{
+			perceivedBalance = balance;
+			
+			// Check assertions
+			assert.equal( typeof perceivedBalance, 'undefined', `Second account checked it's balance to be ${perceivedBalance}, which it shouldn't have been able to do`);
+		});
 	});
 	
 	it(`should not let the second account withdraw ${withdrawAmount} eth to the third`, ()=>{
