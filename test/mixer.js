@@ -11,13 +11,18 @@ function toWei(eth) {
 	return web3.toWei(eth,'ether');
 }
 
+const gasPrice = Mixer.class_defaults.gasPrice/10000;
+
 contract('Mixer', (accounts)=>{
-		var meta, 
-			accountInitial, contractInitial, userBalanceInitial,
-			accountFinal, contractFinal, userBalanceFinal;
 	
-	const depositAmount = 10,
-		withdrawAmount = 5;
+	// Vars to be scoped in the each test... might as well
+	// define them here since the tests will run synchronously
+	var meta, gasPaid,
+		accountInitial, contractInitial, userBalanceInitial,
+		accountFinal, contractFinal, userBalanceFinal;
+	
+	// Set variables for testing
+	const depositAmount=10, withdrawAmount=5;
 
 	it(`should let the first account deposit ${depositAmount} eth`, ()=>{
 		return Mixer.deployed().then( (instance)=>{
@@ -35,7 +40,8 @@ contract('Mixer', (accounts)=>{
 				from:accounts[1], 
 				value:toWei(depositAmount)
 			});
-		}).then( ()=>{
+		}).then( (result)=>{
+			gasPaid = result.receipt.gasUsed/gasPrice;
 			
 			// Check final balances
 			accountFinal = toEth(getBalance(accounts[1]));
@@ -49,9 +55,8 @@ contract('Mixer', (accounts)=>{
 				`User balance didn't increase by ${depositAmount}, but went from ${userBalanceInitial} to ${userBalanceFinal}`);
 			assert.equal(contractFinal-contractInitial, depositAmount, 
 				`Contract balance didn't increase by ${depositAmount} eth, but went from ${contractInitial} to ${contractFinal}`);
-			//TODO: Account for spent gas
-			//assert.equal(accountInitial-accountFinal, depositAmount, 
-			//	`Account one balance didn't decrease by ${depositAmount} eth, but went from ${accountInitial} to ${accountFinal}`);
+			assert.equal(+((accountInitial-accountFinal).toFixed(7)), depositAmount+gasPaid, 
+				`Account one balance didn't decrease by ${depositAmount+gasPaid} eth, but went from ${accountInitial} to ${accountFinal}`);
 		});
 		
 	});
