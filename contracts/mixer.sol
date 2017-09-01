@@ -13,8 +13,10 @@ contract Mixer {
 	/// Users of the mixer, and the amount deposited
 	mapping(address => uint) balances;
 	
+	/// Show balance for a particular user
 	function showUserBalance(address user) returns(uint) {
-		require(msg.sender == owner);
+		// Only allow contract owner or user to see the balance
+		require( msg.sender==owner || msg.sender==user );
 		return balances[user];
 	}
 	
