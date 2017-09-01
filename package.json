@@ -7,6 +7,7 @@
     "test": "test"
   },
   "dependencies": {
+    "abi-decoder": "^1.0.8",
     "web3": "^1.0.0-beta.18"
   },
   "devDependencies": {},
