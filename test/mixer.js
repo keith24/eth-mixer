@@ -1,4 +1,11 @@
+// Import dependencies
+//const abiDecoder = require('abi-decoder');
+
+// Import contracts
 const Mixer = artifacts.require('Mixer');
+
+// Add contracts to decoder
+//abiDecoder.addABI(Mixer.abi);
 
 // Aliases
 function getBalance(address) {
@@ -16,7 +23,7 @@ contract('Mixer', (accounts)=>{
 	
 	// Vars to be scoped in the each test... might as well
 	// define them here since the tests will run synchronously
-	var meta, gasPaid,
+	var meta, gasPaid, 
 		accountInitial, contractInitial, userBalanceInitial,
 		accountFinal, contractFinal, userBalanceFinal;
 	
@@ -161,6 +168,8 @@ contract('Mixer', (accounts)=>{
 			);
 		})
 		.then( (result)=>{
+			// Not very anonymous:
+			//console.log(abiDecoder.decodeMethod(web3.eth.getTransaction(result.tx).input));
 			
 			// Check final balances
 			accountFinal = toEth(getBalance(accounts[3]));
@@ -177,5 +186,5 @@ contract('Mixer', (accounts)=>{
 				`Account three balance didn't increase by ${withdrawAmount} eth, but went from ${accountInitial} to ${accountFinal}`);
 		});
 	});
-
+	
 });
