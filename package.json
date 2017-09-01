@@ -24,10 +24,10 @@
     "tumbler"
   ],
   "author": {
-    "name" : "Keith Irwin"
-  , "email" : "npm@keithirwin.us"
-  , "url" : "https://keithirwin.us/"
-},
+    "name": "Keith Irwin",
+    "email": "npm@keithirwin.us",
+    "url": "https://keithirwin.us/"
+  },
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/keith24/eth-mixer/issues"
